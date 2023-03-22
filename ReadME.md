@@ -1,6 +1,6 @@
 # Flaky Toothbrush Surge.sh
 
-[![Deploy Website](https://github.com/tomchatting/flaky-toothbrush/actions/workflows/surge.yml/badge.svg)](https://github.com/tomchatting/flaky-toothbrush/actions/workflows/surge.yml)
+[![build+deploy](https://github.com/tomchatting/flaky-toothbrush/actions/workflows/surge.yml/badge.svg?branch=main)](https://github.com/tomchatting/flaky-toothbrush/actions/workflows/surge.yml)
 
 [Surge.sh](https://surge.sh) is a wicked simple Static-Site Generator accessible from your shell.
 
