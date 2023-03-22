@@ -54,20 +54,24 @@
 
         <p>Hopefully, the second (green) bar above is ahead of the first (blue) bar. This would suggest I'm on target.</p>
 
-        <p>
+        <p class="mb-4">
             <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseGeekyPart" role="button"
                 aria-expanded="false" aria-controls="collapseGeekyPart">
                 How does this work?
             </a>
         </p>
-        <div class="collapse" id="collapseGeekyPart">
+        <div class="collapse mb-4" id="collapseGeekyPart">
             <div class="card card-body">
-                <p>How do you know someone has an Apple Watch? They tell you.</p>
-                <p>I have an Apple Watch. This syncs to a private data repository on my GitHub account. Every time I
+                <p class="font-monospace">How do you know someone has an Apple Watch? They tell you.</p>
+                <p class="font-monospace">I have an Apple Watch. This syncs to a private data repository on my GitHub account. Every time I
                     complete any kind of recorded workout, or at the end of a day, my movement totals are sent across in
                     a big CSV dump. I use GitHub Actions to turn this into a JSON feed which powers this page.</p>
             </div>
         </div>
+
+        <footer class="mt-auto text-black-50 py-4 border-top">
+            <p>Made in a day by <a href="/">Tom Chatting</a>.</p>
+        </footer>
 
     </div>
 
