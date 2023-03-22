@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to flaky-toothbrush.surge.sh
-        uses: dswistowski/surge-sh-action@v1
+        uses: dswistowski/surge-sh-action@v1.0.1
         with:
           domain: 'https://flaky-toothbrush.surge.sh'
           project: '.'
