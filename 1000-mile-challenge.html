@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>NHS 1000 Mile Challenge</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container col-sm-8">
+        <h1 class="pt-4">Hello, world!</h1>
+
+        <p>👋, my name is Tom and I'm a Business Intelligence Developer in Information Services, part of the Finance and
+            Information Team at Airedale NHS Foundation Trust.</p>
+
+        <p>I'm taking part in the NHS 1000 Miles Challenge, as part of the celebrations for the <a
+                href="https://www.england.nhs.uk/nhsbirthday/get-involved/">NHS's 75th Birthday</a>.</p>
+
+        <h2>Latest data available to <span id="today-date"></span></h2>
+
+        <p>Year progress:
+        <div class="progress" role="progressbar" aria-label="Visual representation of our progress through the year"
+            style="height: 20px" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar" id="year-percent"></div>
+        </div>
+        </p>
+
+        <h2 id="moved-heading" class="placeholder-glow"><span id="moved-heading-placeholder"
+                class="placeholder col-6"></span></h2>
+
+        <p>
+        <div class="progress" role="progressbar" aria-label="Visual representation of progress in 1000 mile challenge"
+            style="height: 20px" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width: 100%;"
+                id="moved-percent"></div>
+        </div>
+        </p>
+
+        <p>Hopefully, the second (green) bar above is ahead of the first (blue) bar. This would suggest I'm on target.</p>
+
+        <p>
+            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseGeekyPart" role="button"
+                aria-expanded="false" aria-controls="collapseGeekyPart">
+                How does this work?
+            </a>
+        </p>
+        <div class="collapse" id="collapseGeekyPart">
+            <div class="card card-body">
+                <p>How do you know someone has an Apple Watch? They tell you.</p>
+                <p>I have an Apple Watch. This syncs to a private data repository on my GitHub account. Every time I
+                    complete any kind of recorded workout, or at the end of a day, my movement totals are sent across in
+                    a big CSV dump. I use GitHub Actions to turn this into a JSON feed which powers this page.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    <script type="text/javascript">
+        async function getResponse() {
+            const response = await fetch(
+                'https://gist.githubusercontent.com/tomchatting/74ac0a895a88db1df3e359a046a1f3b0/raw/47a58013eee59a57f0b86e313f4785c62e2d23d2/distance-covered.json',
+                {
+                    method: 'GET'
+                }
+            );
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data;
+        }
+
+        Date.prototype.isLeapYear = function () {
+            var year = this.getFullYear();
+            if ((year & 3) != 0) return false;
+            return ((year % 100) != 0 || (year % 400) == 0);
+        };
+
+        // Get Day of Year
+        Date.prototype.getDOY = function () {
+            var dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            var mn = this.getMonth();
+            var dn = this.getDate();
+            var dayOfYear = dayCount[mn] + dn;
+            if (mn > 1 && this.isLeapYear()) dayOfYear++;
+            return dayOfYear;
+        };
+
+        function getMax(arr, prop) {
+            var max;
+            for (var i = 0; i < arr.length; i++) {
+                if (max == null || (arr[i][prop]) > (max[prop]))
+                    max = arr[i];
+            }
+            return max;
+        }
+
+        var daysInYear = 365;
+        var year = 2023;
+        if ((0 == year % 4) && (0 != year % 100) || (0 == year % 400)) daysInYear++;
+
+        (async () => {
+            const returnData = await getResponse();
+
+            const maxDate = new Date(getMax(returnData, 'Date')['Date']);
+            const todaysDate = new Date(maxDate).toLocaleDateString('en-GB');
+            const dayOfYear = new Date(maxDate).getDOY();
+            const yearProgressWidth = (dayOfYear / daysInYear * 100).toFixed(2);
+
+            const yearProgressEle = document.getElementById('year-percent');
+            const todaysDateEle = document.getElementById('today-date');
+
+            yearProgressEle.style.width = yearProgressWidth + '%';
+            yearProgressEle.textContent = yearProgressWidth + '%';
+            todaysDateEle.textContent = todaysDate;
+
+            const movedHeadingEle = document.getElementById('moved-heading');
+            const movedHeadingPlaceholderEle = document.getElementById('moved-heading-placeholder');
+            const movedPercentEle = document.getElementById('moved-percent');
+
+            const movedText = 'So far, Tom has moved ';
+
+            var result = returnData.reduce(function (_this, val) {
+                return _this + parseFloat(val['Distance Walking/Running'])
+            }, 0);
+
+            const distanceMovedKm = result / 1000;
+            const kmToMilesConversionFactor = 1.609;
+
+            const distanceMovedMiles = (distanceMovedKm / kmToMilesConversionFactor).toFixed(2);
+
+            movedHeadingEle.textContent = movedText + distanceMovedMiles + ' miles!';
+            movedHeadingPlaceholderEle.remove();
+
+            const distanceMovedPercentage = ((distanceMovedMiles / 1000) * 100).toFixed(2);
+
+            movedPercentEle.classList.remove('progress-bar-striped');
+            movedPercentEle.classList.remove('progress-bar-animated');
+            movedPercentEle.style.width = distanceMovedPercentage + '%';
+            movedPercentEle.textContent = distanceMovedPercentage + '%';
+
+        })();
+
+
+    </script>
+</body>
+
+</html>
