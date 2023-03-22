@@ -19,12 +19,13 @@
         <p>I'm taking part in the NHS 1000 Miles Challenge, as part of the celebrations for the <a
                 href="https://www.england.nhs.uk/nhsbirthday/get-involved/">NHS's 75th Birthday</a>.</p>
 
-        <h2>Latest data available to <span id="today-date"></span></h2>
+        <h2>Latest data available to <span id="latest-heading-placeholder"
+            class="placeholder col-2"></span><span id="today-date"></span></h2>
 
         <p>Year progress:
         <div class="progress" role="progressbar" aria-label="Visual representation of our progress through the year"
             style="height: 20px" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-            <div class="progress-bar" id="year-percent"></div>
+            <div class="progress-bar progress-bar-striped progress-bar-animated" id="year-percent" style="width: 100%;"></div>
         </div>
         </p>
 
@@ -115,11 +116,15 @@
             const yearProgressWidth = (dayOfYear / daysInYear * 100).toFixed(2);
 
             const yearProgressEle = document.getElementById('year-percent');
+            const todaysDatePlaceholderEle = document.getElementById('latest-heading-placeholder');
             const todaysDateEle = document.getElementById('today-date');
 
             yearProgressEle.style.width = yearProgressWidth + '%';
             yearProgressEle.textContent = yearProgressWidth + '%';
+            yearProgressEle.classList.remove('progress-bar-striped');
+            yearProgressEle.classList.remove('progress-bar-animated');
             todaysDateEle.textContent = todaysDate;
+            todaysDatePlaceholderEle.remove();
 
             const movedHeadingEle = document.getElementById('moved-heading');
             const movedHeadingPlaceholderEle = document.getElementById('moved-heading-placeholder');
