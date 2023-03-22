@@ -1,11 +1,12 @@
-name: On commit
+name: Deploy Website
 
-on: push
+on: [push]
 
 jobs:
-  my-job:
-    name: Publish to Surge.sh
+  build:
     runs-on: ubuntu-latest
+    name: Publish to Surge.sh
+    
     steps:
       - name: Deploy to flaky-toothbrush.surge.sh
       - uses: actions/checkout@v3
