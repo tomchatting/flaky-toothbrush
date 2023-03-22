@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to flaky-toothbrush.surge.sh
-        uses: dswistowski/surge-sh-action@v1.0.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          domain: 'https://flaky-toothbrush.surge.sh'
-          project: '.'
-          login: ${{ secrets.surge_login }}
-          token: ${{ secrets.surge_token }}
+          node-version: 16
+      - run: npm install -g surge
+      - run: surge ./ ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
