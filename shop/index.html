@@ -14,9 +14,7 @@
 <body>
     <div class="container col-sm-6">
         <h1>Welcome to my awesome shop</h1>
-        <div class="row">
-            <div id="shop-floor" class="col-sm-6 mb-3 mb-sm-0">
-            </div>
+        <div class="row shop-floor">
         </div>
 
         <div class="modal fade modal-lg" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel"
@@ -66,7 +64,7 @@
 
                 returnData.forEach(p => {
                     content += `
-              <div class="card" id="card-${p.id}">
+              <div class="card" lass="col-sm-4" id="card-${p.id}">
                   <img src="${p['prev-img-src']}" class="card-img-top img-fluid" class="img-fluid" alt="${p['description']}">
                   <div class="card-body">
                       <h5 class="card-title" id="itemName">${p.name}</h5>
