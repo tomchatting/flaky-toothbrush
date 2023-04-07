@@ -9,5 +9,17 @@
         "prev-img-w": "286",
         "prev-img-h": "187",
         "model-img-src": "https://m.media-amazon.com/images/I/71PDCo6PPaL._AC_UX679_.jpg"
+    },
+
+    {
+        "id": 1,
+        "name": "A simple T-shirt",
+        "price": "£20",
+        "description": "A humble T-shirt, ready to truly mark you as a developer.",
+        "stock": { "s": false, "m": true, "l": true, "xl": false },
+        "prev-img-src": "https://www.mrporter.com/variants/images/343549805774908/in/w560_q60.jpg",
+        "prev-img-w": "313",
+        "prev-img-h": "418",
+        "model-img-src": "https://m.media-amazon.com/images/I/71PDCo6PPaL._AC_UX679_.jpg"
     }
 ]
