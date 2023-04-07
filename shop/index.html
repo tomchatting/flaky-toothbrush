@@ -14,66 +14,116 @@
 <body>
     <div class="container col-sm-6">
         <h1>Welcome to my awesome shop</h1>
-        <div class="card" style="width: 18rem;">
-            <img src=""
-                width="286" height="187" class="card-img-top" alt="...">
-            <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemModal"
-                    data-bs-item="1">Buy some jeans</button>
-            </div>
-        </div>
-    </div>
+        <div id="shop-floor">
 
-    <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+        </div>
+
+        <div class="modal fade modal-lg" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="itemModalLabel"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-4 ms-auto" id="item-img"></div>
+                                <div class="col-md-8 ms-auto">.col-md-6 .ms-auto</div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-    <script>
-        async function getResponse() {
-            const response = await fetch(
-                'awesome-clothes.json',
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+        <script>
+            const shopFloorEle = document.getElementById('shop-floor');
+            const returnData = [
                 {
-                    method: 'GET'
+                    "id": 0,
+                    "name": "Awesome jeans",
+                    "price": "£60",
+                    "description": "A pair of jeans. No, not just a pair of jeans, these will change your life.",
+                    "stock": { "s": false, "m": true, "l": true, "xl": false },
+                    "prev-img-src": "https://cdn.shopify.com/s/files/1/0449/7011/5223/collections/Collections_Placeholder_Man_2d9ff3d9-4b87-45ec-94e5-9c289986b027_1200x1200.png?v=1598643219",
+                    "prev-img-w": "286",
+                    "prev-img-h": "187",
+                    "model-img-src": "https://m.media-amazon.com/images/I/71PDCo6PPaL._AC_UX679_.jpg"
                 }
-            );
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data;
-        }
+            ];
+            /*async function getResponse() {
+                const response = await fetch(
+                    'awesome-clothes.json',
+                    {
+                        method: 'GET'
+                    }
+                );
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            }*/
 
-        (async () => {
-            const returnData = await getResponse();
+            (async () => {
+                //const returnData = await getResponse();
 
-            console.log(returnData);
-        })();
-    </script>
+                console.log(returnData);
+
+                let content = '';
+
+                returnData.forEach(p => {
+                    content += `
+              <div class="card" style="width: 18rem;" id="card-${p.id}">
+                  <img src="${p['prev-img-src']}" class="card-img-top img-fluid" height="${p['prev-img-h']}" width="${p['prev-img-w']}" alt="${p['description']}">
+                  <div class="card-body">
+                      <h5 class="card-title" id="itemName">${p.name}</h5>
+                      <p class="card-text" id="itemDesc">${p.description}</p>
+                      <p class="card-text" id="itemPrice">${p.price}</p>
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemModal"
+                        data-bs-item="${p.id}">View details</button>
+                  </div>
+              </div>`
+                });
+
+                document.querySelector("#shop-floor").innerHTML = content;
+
+                const itemModal = document.getElementById('itemModal');
+                if (itemModal) {
+                    itemModal.addEventListener('show.bs.modal', event => {
+                        // Button that triggered the modal
+                        const button = event.relatedTarget;
+                        // Extract info from data-bs-* attributes
+                        const item = returnData[button.getAttribute('data-bs-item')];
+                        console.log(item);
+                        // If necessary, you could initiate an Ajax request here
+                        // and then do the updating in a callback.
+
+                        // Update the modal's content.
+                        const modalTitle = itemModal.querySelector('.modal-title');
+
+                        modalTitle.textContent = `Order ${item.name}`;
+
+                        document.getElementById('item-img').innerHTML = `
+                        <img src="${item['model-img-src']}" class="img-fluid" alt="An image of the clothes on our model">
+                        `;
+
+                        const state = { page_id: 1, user_id: 5 };
+                        const url = 'item/' + state.page_id;
+
+                        history.pushState(state, "", url);
+                    })
+                }
+
+                itemModal.addEventListener('hidden.bs.modal', event => {
+                    history.back();
+                })
+            })();
+        </script>
 </body>
 
 </html>
