@@ -98,8 +98,8 @@
                         <img src="${item['model-img-src']}" class="img-fluid" alt="An image of the clothes on our model">
                         `;
 
-                        const state = { page_id: 1, user_id: 5 };
-                        const url = 'item/' + state.page_id;
+                        var state = { page_id: item.id, user_id: 5 };
+                        var url = 'item/' + state.page_id;
 
                         history.pushState(state, "", url);
                     })
