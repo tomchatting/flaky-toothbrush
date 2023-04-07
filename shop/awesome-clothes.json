@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "name": "Awesome jeans",
+        "price": "£60",
+        "description": "A pair of jeans. No, not just a pair of jeans, these will change your life.",
+        "stock": {"s": false, "m": true, "l": true, "xl": false},
+        "img-src": "https://cdn.shopify.com/s/files/1/0449/7011/5223/collections/Collections_Placeholder_Man_2d9ff3d9-4b87-45ec-94e5-9c289986b027_1200x1200.png?v=1598643219",
+        "img-w": "286",
+        "img-h": "187"
+    }
+]
