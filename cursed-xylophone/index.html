@@ -156,7 +156,7 @@
 
         keys.forEach(key => {
             key.addEventListener('click', function (e) {
-                var audio = new Audio(key.id + '-' + currentWord + '.mp3');
+                var audio = new Audio('https://github.com/tomchatting/flaky-toothbrush/raw/main/cursed-xylophone/' + key.id + '-' + currentWord + '.mp3');
                 audio.play();
 
                 incrementWord();
@@ -174,7 +174,7 @@
 
         for (var i = 0; i < words.length; i++) {
             for (var j = 1; j <= maxWords; j++) {
-                preloadAudio(words[i] + '-' + j + '.mp3');
+                preloadAudio('https://github.com/tomchatting/flaky-toothbrush/raw/main/cursed-xylophone/' + words[i] + '-' + j + '.mp3');
             }
 
         }
