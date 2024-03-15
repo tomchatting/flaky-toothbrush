@@ -37,13 +37,14 @@
             
         }
 
-        #keyboard {
+        #keyboard, #loading {
             display: none;
         }
 
-        #loading {
+        .js-enabled #loading {
             font-size: 3rem;
             text-align: center;
+            display: block;
         }
 
         #keyboard a {
@@ -66,7 +67,7 @@
                 scale: 0.9;
             }
         }
-        
+
         #keyboard a:active {
             scale: 1.0;
             padding-top: 5px;
@@ -92,8 +93,15 @@
             background: pink
         }
 
-        .no-js {
+        .js-enabled .no-js {
             display: none;
+        }
+        
+        .alert {
+            border: 5px solid pink;
+            background: red;
+            color: white;
+            padding: 5px;
         }
     </style>
 </head>
@@ -102,9 +110,10 @@
     <script>document.documentElement.className = ((document.documentElement.className) ? document.documentElement.className + ' js-enabled' : 'js-enabled');</script>
 
     <div class="container">
-        <div class="no-js">This site needs JavaScript enabled to work, chief.</div>
 
         <h1>Cursed Xylophone</h1>
+
+        <div class="no-js alert">This site needs JavaScript enabled to work, chief.</div>
 
         <div id="loading">Loading (<span id="loaded-val">0</span>%)...</div>
 
