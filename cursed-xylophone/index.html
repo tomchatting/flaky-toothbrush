@@ -1,20 +1,48 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8" />
     <title>title</title>
     <style>
-        * {padding: 0; margin: 0;}
+        * {
+            box-sizing: border-box;
+            position: relative;
+            min-width: 0;
+        }
 
-        #keyboard {
+        html {
+            font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+            font-size: 16px;
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            text-wrap: balance;
+        }
+
+        p {
+            text-wrap: pretty;
+        }
+
+        .container {
             width: 80%;
             margin: 0 auto;
-            display: flex;
+            
+        }
+
+        #keyboard {
             display: none;
         }
 
         #loading {
-            font-size: 24rem;
+            font-size: 3rem;
             text-align: center;
         }
 
@@ -26,7 +54,7 @@
             margin-right: 0;
             height: 300px;
             text-indent: -9999px;
-            transition: all .2s ease-in-out; 
+            transition: all .05s ease-in-out;
         }
 
         #keyboard a:last-child {
@@ -42,28 +70,50 @@
             padding-top: 5px;
         }
 
-        #do {background: red;}
-        #re {background: blue}
-        #mi {background: green}
-        #fa {background: yellow}
-        #so {background: pink}
+        #do {
+            background: red;
+        }
 
-        .no-js {display: none;}
+        #re {
+            background: blue
+        }
+
+        #mi {
+            background: green
+        }
+
+        #fa {
+            background: yellow
+        }
+
+        #so {
+            background: pink
+        }
+
+        .no-js {
+            display: none;
+        }
     </style>
 </head>
-<body class="">
+
+<body class="" tabIndex=0>
     <script>document.documentElement.className = ((document.documentElement.className) ? document.documentElement.className + ' js-enabled' : 'js-enabled');</script>
 
-    <div class="no-js">This site needs JavaScript enabled to work, chief.</div>
+    <div class="container">
+        <div class="no-js">This site needs JavaScript enabled to work, chief.</div>
 
-    <div id="loading">Loading (<span id="loaded-val">0</span>%)...</div>
+        <h1>Cursed Xylophone</h1>
 
-    <div id="keyboard">
-        <a href="#" id="do" class="key">do</a>
-        <a href="#" id="re" class="key">re</a>
-        <a href="#" id="mi" class="key">mi</a>
-        <a href="#" id="fa" class="key">fa</a>
-        <a href="#" id="so" class="key">so</a>
+        <div id="loading">Loading (<span id="loaded-val">0</span>%)...</div>
+
+        <div id="keyboard">
+            <a href="#" id="do" class="key">do</a>
+            <a href="#" id="re" class="key">re</a>
+            <a href="#" id="mi" class="key">mi</a>
+            <a href="#" id="fa" class="key">fa</a>
+            <a href="#" id="so" class="key">so</a>
+        </div>
+
     </div>
 
 
@@ -84,30 +134,23 @@
 
         function loadedAudio() {
             loaded++;
-            
-            document.getElementById('loaded-val').innerText = loaded / numberOfFiles * 100;
 
-            if (loaded == numberOfFiles){
+            document.getElementById('loaded-val').innerText = Math.round(loaded / numberOfFiles * 100);
+
+            if (loaded == numberOfFiles) {
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('keyboard').style.display = 'block';
+                document.getElementById('keyboard').style.display = 'flex';
             }
         }
 
         keys.forEach(key => {
-            key.addEventListener('click', function(e) {
+            key.addEventListener('click', function (e) {
                 var audio = new Audio(key.id + '-' + currentWord + '.mp3');
                 audio.play();
 
                 incrementWord();
             })
         });
-
-        for (var i = 0; i < words.length; i++) {
-            for (var j = 1; j <= maxWords; j++) {
-                preloadAudio(words[i] + '-' + j + '.mp3');
-            }
-            
-        }
 
         function incrementWord() {
             if (currentWord < maxWords) {
@@ -117,6 +160,14 @@
 
             currentWord = 1;
         }
+
+        for (var i = 0; i < words.length; i++) {
+            for (var j = 1; j <= maxWords; j++) {
+                preloadAudio(words[i] + '-' + j + '.mp3');
+            }
+
+        }
     </script>
 </body>
+
 </html>
