@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+    <style>
+        * {padding: 0; margin: 0;}
+
+        .keyboard {
+            width: 84vw;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        .keyboard a {
+            display: inline-block;
+            border-radius: 25px;
+            border: 1px solid red;
+            width: 20vw;
+            margin-right: 1vw;
+            height: 300px;
+            text-indent: -9999px;
+            transition: all .2s ease-in-out; 
+        }
+
+        .keyboard a:last-child {
+            margin-right: 0;
+        }
+
+        .keyboard a:hover {
+            scale: 0.9;
+        }
+
+        #do {background: red;}
+        #re {background: blue}
+        #mi {background: green}
+        #fa {background: yellow}
+        #so {background: pink}
+
+    </style>
+</head>
+<body>
+    <div class="keyboard">
+        <a href="#" id="do" class="key">do</a>
+        <a href="#" id="re" class="key">re</a>
+        <a href="#" id="mi" class="key">mi</a>
+        <a href="#" id="fa" class="key">fa</a>
+        <a href="#" id="so" class="key">so</a>
+    </div>
+
+
+    <script>
+        const keys = document.querySelectorAll('.key');
+        let currentWord = 1;
+        const maxWords = 5;
+
+        keys.forEach(key => {
+            key.addEventListener('click', function(e) {
+                var audio = new Audio(key.id + '-' + currentWord + '.mp3');
+                audio.play();
+                
+                key.style.opacity = 0.5;
+
+                setTimeout(function() {
+                    key.style.opacity = 1;
+                }, 500);
+
+                incrementWord();
+            })
+        });
+
+        function incrementWord() {
+            if (currentWord < maxWords) {
+                currentWord++;
+                return;
+            }
+
+            currentWord = 1;
+        }
+    </script>
+</body>
+</html>
