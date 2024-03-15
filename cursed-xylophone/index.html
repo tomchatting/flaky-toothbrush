@@ -6,29 +6,40 @@
     <style>
         * {padding: 0; margin: 0;}
 
-        .keyboard {
-            width: 84vw;
+        #keyboard {
+            width: 80%;
             margin: 0 auto;
             display: flex;
+            display: none;
         }
 
-        .keyboard a {
+        #loading {
+            font-size: 24rem;
+            text-align: center;
+        }
+
+        #keyboard a {
             display: inline-block;
             border-radius: 25px;
             border: 1px solid red;
-            width: 20vw;
-            margin-right: 1vw;
+            width: calc(90% / 5);
+            margin-right: 0;
             height: 300px;
             text-indent: -9999px;
             transition: all .2s ease-in-out; 
         }
 
-        .keyboard a:last-child {
+        #keyboard a:last-child {
             margin-right: 0;
         }
 
-        .keyboard a:hover {
+        #keyboard a:hover {
             scale: 0.9;
+        }
+
+        #keyboard a:active {
+            scale: 1.0;
+            padding-top: 5px;
         }
 
         #do {background: red;}
@@ -37,10 +48,17 @@
         #fa {background: yellow}
         #so {background: pink}
 
+        .no-js {display: none;}
     </style>
 </head>
-<body>
-    <div class="keyboard">
+<body class="">
+    <script>document.documentElement.className = ((document.documentElement.className) ? document.documentElement.className + ' js-enabled' : 'js-enabled');</script>
+
+    <div class="no-js">This site needs JavaScript enabled to work, chief.</div>
+
+    <div id="loading">Loading (<span id="loaded-val">0</span>%)...</div>
+
+    <div id="keyboard">
         <a href="#" id="do" class="key">do</a>
         <a href="#" id="re" class="key">re</a>
         <a href="#" id="mi" class="key">mi</a>
@@ -53,21 +71,43 @@
         const keys = document.querySelectorAll('.key');
         let currentWord = 1;
         const maxWords = 5;
+        var loaded = 0;
+
+        const words = ['do', 're', 'mi', 'fa', 'so'];
+        const numberOfFiles = words.length * maxWords;
+
+        function preloadAudio(url) {
+            var audio = new Audio();
+            audio.addEventListener('canplaythrough', loadedAudio, false);
+            audio.src = url;
+        }
+
+        function loadedAudio() {
+            loaded++;
+            
+            document.getElementById('loaded-val').innerText = loaded / numberOfFiles * 100;
+
+            if (loaded == numberOfFiles){
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('keyboard').style.display = 'block';
+            }
+        }
 
         keys.forEach(key => {
             key.addEventListener('click', function(e) {
                 var audio = new Audio(key.id + '-' + currentWord + '.mp3');
                 audio.play();
-                
-                key.style.opacity = 0.5;
-
-                setTimeout(function() {
-                    key.style.opacity = 1;
-                }, 500);
 
                 incrementWord();
             })
         });
+
+        for (var i = 0; i < words.length; i++) {
+            for (var j = 1; j <= maxWords; j++) {
+                preloadAudio(words[i] + '-' + j + '.mp3');
+            }
+            
+        }
 
         function incrementWord() {
             if (currentWord < maxWords) {
