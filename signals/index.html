@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Signals 🚦 demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A demonstration and explanation of the Signals proposal in vanilla JavaScript.">
+  <style>
+    * {
+      box-sizing: border-box;
+      position: relative;
+      min-width: 0;
+    }
+
+    html {
+      font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      font-weight: 400;
+      color-scheme: light dark;
+      background: #15202b;
+      color: #fff;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+    }
+
+    main {
+      max-width: 680px;
+      width: 90%;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      text-wrap: balance;
+    }
+
+    h1 {
+      font-size: 3.2em;
+      line-height: 1.1;
+    }
+
+    h2 {
+      font-size: 2.5em;
+      line-height: 1.1;
+    }
+
+    h3 {
+      font-size: 1.8em;
+      line-height: 1.1;
+    }
+
+    p {
+      text-wrap: pretty;
+      font-size: 1.1em;
+    }
+
+    a, a:visited {
+      color: #55acee;
+    }
+
+    a:focus {
+      outline: 3px dashed #0a58ca;
+    }
+
+    small {
+      font-size: 50%;
+      line-height: 2;
+      vertical-align: text-top;
+    }
+
+    button {
+      color: #fff;
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+      -webkit-appearance: button;
+      font-size: 1.1875rem;
+      line-height: 1.47368;
+      border: 2px solid transparent;
+      border-radius: 4px;
+      box-shadow: 0 4px 0 #00401e;
+      box-sizing: border-box;
+      display: inline-block;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 0;
+      padding: 12px 16px;
+      position: relative;
+      text-align: center;
+      vertical-align: top;
+      width: auto;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    button:active {
+        background: #00401e;
+        box-shadow: none;
+        color: #fff;
+        top: 4px;
+    }
+
+    button:focus:not(:focus-visible) {
+        outline: 0;
+    }
+
+    button:hover {
+      color: #fff;
+      background-color: #0b5ed7;
+      border-color: #0a58ca;
+    }
+
+    button:focus {
+        color: #fff;
+        background-color: #0b5ed7;
+        border-color: #0a58ca;
+        box-shadow: 0 0 0 0.25rem rgba(49, 132, 253, 0.5);
+    }
+
+    code {
+      background: #fefefe40;
+      padding: 5px;
+      border: 1px solid #fefefe60;
+      border-radius: 5px;
+      white-space: pre;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="center">
+      <h1>JavaScript 🚦Signals are <small>(hopefully)</small> coming</h1>
+
+      <p class="center">
+        Behold, the variable <strong>counter</strong>, and it's <strong>parity</strong>!<br>
+        Use the magic of the buttons below to increase or decrease the number, and watch 
+        as it's parity is updated before you eyes 👀🧙‍♂️.
+      </p>
+
+      <h3>The value of counter is <span id="current-number">0</span>, which is <span id="current-parity">even</span></h3>
+
+      <button id="increment">Number++</button>
+      <button id="decrement">Number--</button>
+    </div>
+
+    <div>
+      <h2 class="center">What is going on?</h2>
+      <p>
+        A bunch of amazing people have released a 
+        <a href="https://github.com/proposal-signals/proposal-signals">working proposal</a>, 
+        which is working through the TC39 process, to add Signals 🚦 to JavaScript.
+      </p>
+      <p>
+        At their most simple, signals allow you to transmit data one-way. The most basic way I can 
+        explain it is by using the demonstration above. This site uses three variables, <code>counter</code>, 
+        <code>isEven</code>, and <code>parity</code>.
+      </p>
+      <p>
+        <code>isEven</code> is a derived (or computed) boolean constant which returns true if <code>counter & 1 == 0</code>.
+      </p>
+      <p>
+        <code>parity</code> is a computed string constant which returns odd or even.
+      </p>
+      <p>
+        Normally, if you declared these three variables one after another they would all be static, meaning 
+        if you changed <code>counter</code> from 1 to 2, <code>isEven</code> and <code>parity</code> would remain 
+        0 and 'odd' respectively.
+      </p>
+      <p>
+        Signals allow you to set computation on variables, so if a Signal with state is changed, those variables 
+        are recalculated.
+      </p>
+
+    </div>
+
+  </main>
+  <script type="module">
+
+    import { Signal } from "./dist/index.js";
+
+    const spanCurrentNumber = document.getElementById('current-number');
+    const spanCurrentParity = document.getElementById('current-parity');
+    const buttonIncrement = document.getElementById('increment');
+
+    const counter = new Signal.State(0);
+    const isEven = new Signal.Computed(() => (counter.get() & 1) == 0);
+    const parity = new Signal.Computed(() => isEven.get() ? "even" : "odd");
+
+    const btns = document.querySelectorAll('button[id$=rement]')
+
+    btns.forEach(btn => {
+
+      btn.addEventListener('click', function(e) {
+        if (btn.id == 'increment') {
+          counter.set(counter.get() + 1);
+        } else {
+          counter.set(counter.get() - 1);
+        }
+        
+        spanCurrentNumber.innerText = counter.get();
+        spanCurrentParity.innerText = parity.get();
+      });
+
+    });
+    
+    
+
+  </script>
+</body>
+
+</html>
