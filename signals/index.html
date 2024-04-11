@@ -213,6 +213,10 @@
         
         spanCurrentNumber.innerText = counter.get();
         spanCurrentParity.innerText = parity.get();
+
+        if (counter.get() === 69) {
+          spanCurrentParity.innerText = 'nice';
+        }
       });
 
     });
